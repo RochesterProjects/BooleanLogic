@@ -13,4 +13,9 @@ should compile with no errors.
 type "./boosim"
 You will get dumps of each circuit, along with all possible combinations and their logical evaluation.
 
+Extra Credit(10% one):
 
+Function that creates bitAdder circut: circuit_bitadder();
+
+Will show up last in the printout, under Testing EXTRA CREDIT circuit BitAdder:
+You will get a dump and and all the possible combinations.

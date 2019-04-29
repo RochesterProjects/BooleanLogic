@@ -167,22 +167,89 @@ static Circuit* circuit_c() {
 	return circuit;
 }
 
-static void testAorBsingle(Circuit* circuit, bool in0, bool in1, bool in2) {
-	Circuit_setInput(circuit, 0, in0);
-	Circuit_setInput(circuit, 1, in1);
-	Circuit_setInput(circuit, 2, in2);
-	Circuit_update(circuit);
-	bool out0 = Circuit_getOutput(circuit, 0);
-	printf("%s %s %s -> %s\n", b2s(in0), b2s(in1), b2s(in2), b2s(out0));
+/**
+ * circuit bitadder
+ */
+static Circuit* circuit_bitadder() {
+	Boolean* x = new_Boolean(false);
+	Boolean* y = new_Boolean(false);
+	Boolean* c = new_Boolean(false);
+	Boolean** inputs = new_Boolean_array(3);
+	inputs[0] = x;
+	inputs[1] = y;
+	inputs[2] = c;
+
+	Boolean* z = new_Boolean(false);
+	Boolean* d = new_Boolean(false);
+	Boolean** outputs = new_Boolean_array(2);
+	outputs[0] = z;
+	outputs[1] = d;
+
+	Gate* not1 = new_Inverter();
+	Gate* not2 = new_Inverter();
+	Gate* not3 = new_Inverter();
+	Gate* and1 = new_And3Gate();
+	Gate* and2 = new_And3Gate();
+	Gate* and3 = new_And3Gate();
+	Gate* and4 = new_And3Gate();
+	Gate* and5 = new_And3Gate();
+	Gate* and6 = new_And3Gate();
+	Gate* and7 = new_And3Gate();
+	Gate* or1 = new_Or4Gate();
+	Gate* or2 = new_Or4Gate();
+	Gate** gates = new_Gate_array(12);
+	gates[0] = not1;
+	gates[1] = not2;
+	gates[2] = not3;
+	gates[3] = and1;
+	gates[4] = and2;
+	gates[5] = and3;
+	gates[6] = and4;
+	gates[7] = and5;
+	gates[8] = and6;
+	gates[9] = and7;
+	gates[10] = or1;
+	gates[11] = or2;
+
+	Circuit *circuit = new_Circuit(3, inputs, 2, outputs, 12, gates);
+	Circuit_connect(circuit, x, Gate_getInput(not1,0));
+	Circuit_connect(circuit, y, Gate_getInput(not2,0));
+	Circuit_connect(circuit, c, Gate_getInput(not3,0));
+	Circuit_connect(circuit, Gate_getOutput(not1), Gate_getInput(and1,0));
+	Circuit_connect(circuit, Gate_getOutput(not2), Gate_getInput(and1,1));
+	Circuit_connect(circuit, c, Gate_getInput(and1,2));
+	Circuit_connect(circuit, Gate_getOutput(not1), Gate_getInput(and2,0));
+	Circuit_connect(circuit, y, Gate_getInput(and2,1));
+	Circuit_connect(circuit, Gate_getOutput(not3), Gate_getInput(and2,2));
+	Circuit_connect(circuit, Gate_getOutput(not1), Gate_getInput(and3,0));
+	Circuit_connect(circuit, y, Gate_getInput(and3,1));
+	Circuit_connect(circuit, c, Gate_getInput(and3,2));
+	Circuit_connect(circuit, x, Gate_getInput(and4,0));
+	Circuit_connect(circuit, Gate_getOutput(not2), Gate_getInput(and4,1));
+	Circuit_connect(circuit, Gate_getOutput(not3), Gate_getInput(and4,2));
+	Circuit_connect(circuit, x, Gate_getInput(and5,0));
+	Circuit_connect(circuit, Gate_getOutput(not2), Gate_getInput(and5,1));
+	Circuit_connect(circuit, c, Gate_getInput(and5,2));
+	Circuit_connect(circuit, x, Gate_getInput(and6,0));
+	Circuit_connect(circuit, y, Gate_getInput(and6,1));
+	Circuit_connect(circuit, Gate_getOutput(not3), Gate_getInput(and6,2));
+	Circuit_connect(circuit, x, Gate_getInput(and7,0));
+	Circuit_connect(circuit, y, Gate_getInput(and7,1));
+	Circuit_connect(circuit, c, Gate_getInput(and7,2));
+	Circuit_connect(circuit, Gate_getOutput(and1), Gate_getInput(or1,0));
+	Circuit_connect(circuit, Gate_getOutput(and2), Gate_getInput(or1,1));
+	Circuit_connect(circuit, Gate_getOutput(and4), Gate_getInput(or1,2));
+	Circuit_connect(circuit, Gate_getOutput(and7), Gate_getInput(or1,3));
+	Circuit_connect(circuit, Gate_getOutput(and3), Gate_getInput(or2,0));
+	Circuit_connect(circuit, Gate_getOutput(and5), Gate_getInput(or2,1));
+	Circuit_connect(circuit, Gate_getOutput(and6), Gate_getInput(or2,2));
+	Circuit_connect(circuit, Gate_getOutput(and7), Gate_getInput(or2,3));
+	Circuit_connect(circuit, Gate_getOutput(or1), z);
+	Circuit_connect(circuit, Gate_getOutput(or2), d);
+	return circuit;
 }
-/*
-static void testC_single(Circuit* circuit, bool in0, bool in1) {
-	Circuit_setInput(circuit, 0, in0);
-	Circuit_setInput(circuit, 1, in1);
-	Circuit_update(circuit);
-	bool out0 = Circuit_getOutput(circuit, 0);
-	printf("%s %s -> %s\n", b2s(in0), b2s(in1), b2s(out0));
-}*/
+
+
 
 
 
@@ -202,9 +269,6 @@ static void circuit_tester(Circuit* circuit){
 		printf("-> ");
 
 		Circuit_update(circuit);
-
-		//Boolean** outputs = Circuit_getOutputs(circuit);
-
 		for(int t = 0; t < Circuit_numOutputs(circuit); t++){
 			printf("%s", b2s(Circuit_getOutput(circuit,t))); //print output
 
@@ -231,6 +295,13 @@ int main(int argc, char **argv) {
 	Circuit_dump(circuitC);
 	printf("\n");
 	circuit_tester(circuitC);
+
+	Circuit* circuitBitAdder = circuit_bitadder();
+	printf("Testing EXTRA CREDIT circuitBitAdder:\n");
+	Circuit_dump(circuitBitAdder);
+	printf("\n");
+	circuit_tester(circuitBitAdder);
+
 
 	
 	
