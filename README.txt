@@ -1,13 +1,16 @@
+Project5: Boolean Logic
 
-File: README.txt
-Creator: George Ferguson
-Created: Mon Jul 16 15:19:39 2018
-Time-stamp: <Tue Jul 17 15:19:21 EDT 2018 ferguson>
+Function that creates circuit A: circuit_a()
+Function that creates circuit B: circuit_b()
+Function that creates circuit C: circuit_c()
 
+Function that generally tests any circuit for all inputs: circuit_tester(Circuit circuit)
 
-Simple Boolean circuit simulator written in C.
+I handled NAND and NOR gates by implementing them in the Gates.c file. You can look at it for my implementation.
+To run:
+type "make"
+should compile with no errors.
+type "./boosim"
+You will get dumps of each circuit, along with all possible combinations and their logical evaluation.
 
-I had to replace my earlier reference-sharing implementation of circuit connections with an explicit list in order to support clean freeing of circuits and their components.
-
-This code gets a clean report from valgrind when compiled with gcc on Fedora Linux (July 2017).
 

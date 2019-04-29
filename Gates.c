@@ -162,6 +162,48 @@ Gate* new_OrGate() {
 }
 
 //
+//NAND Gate
+//
+
+static void NANDGate_update(Gate * this){
+	Boolean_setValue(this->output, !(Boolean_getValue(this->inputs[0]) && Boolean_getValue(this->inputs[1])));
+}
+
+static void NANDGate_print(Gate *this) {
+	BinaryGate_print(this, "NAND");
+}
+
+Gate* new_NANDGate(){
+	Gate* this = new_BinaryGate();
+	this->inputs[0] = new_Boolean(false);
+	this->inputs[1] = new_Boolean(false);
+	this->update = NANDGate_update;
+	this->print = NANDGate_print;
+	return this;
+}
+
+//
+//NOR Gate
+//
+
+static void NORGate_update(Gate * this){
+	Boolean_setValue(this->output, !(Boolean_getValue(this->inputs[0]) || Boolean_getValue(this->inputs[1])));
+}
+
+static void NORGate_print(Gate *this) {
+	BinaryGate_print(this, "NOR");
+}
+
+Gate* new_NORGate(){
+	Gate* this = new_BinaryGate();
+	this->inputs[0] = new_Boolean(false);
+	this->inputs[1] = new_Boolean(false);
+	this->update = NORGate_update;
+	this->print = NORGate_print;
+	return this;
+}
+
+//
 // And3Gate
 //
 

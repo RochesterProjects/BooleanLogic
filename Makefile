@@ -11,10 +11,10 @@ OBJS = $(SRCS:.c=.o)
 EXE = boosim
 ZIPDIR = CSC173 Project 5 Boolean Circuit Simulator
 
-CFLAGS = -std=c99 -Wall -Werror -g
+CFLAGS =  -std=c99  -Wall -Werror -g 
 
 $(EXE): $(OBJS)
-	$(CC) -o $@ $(OBJS)
+	$(CC) -o $@ $(OBJS) -lm
 
 valgrind:
 	valgrind ./$(EXE)
